@@ -76,7 +76,28 @@ mysql> SELECT amount, payment_date FROM payment WHERE payment_date BETWEEN '2005
 
 Получите последние пять аренд фильмов.  
 
-### Решение:  
+### Решение:    
+
+- Здесь, для своего же понимания, выполняем все наглядно, без аллиасов и т.д.:
+
+```
+mysql> SELECT sakila.film.title, sakila.rental.rental_date
+    -> FROM sakila.rental, sakila.inventory, sakila.film
+    -> WHERE sakila.rental.inventory_id = sakila.inventory.inventory_id
+    -> AND sakila.inventory.film_id = sakila.film.film_id
+    -> ORDER BY sakila.rental.rental_date DESC
+    -> LIMIT 5;
++--------------------+---------------------+
+| title              | rental_date         |
++--------------------+---------------------+
+| ZHIVAGO CORE       | 2006-02-14 15:16:03 |
+| WORLD LEATHERNECKS | 2006-02-14 15:16:03 |
+| WOMEN DORADO       | 2006-02-14 15:16:03 |
+| WINDOW SIDE        | 2006-02-14 15:16:03 |
+| WILD APOLLO        | 2006-02-14 15:16:03 |
++--------------------+---------------------+
+5 rows in set (0.00 sec)
+```
 
 ---
 
