@@ -78,7 +78,7 @@ mysql> SELECT amount, payment_date FROM payment WHERE payment_date BETWEEN '2005
 
 ### Решение:    
 
-- Здесь, для своего же понимания, выполняем все наглядно, без аллиасов и т.д.:
+- Здесь, для своего же понимания, выполняем все наглядно, без алиасов и т.д.:
 
 ```
 mysql> SELECT sakila.film.title, sakila.rental.rental_date
@@ -109,6 +109,52 @@ mysql> SELECT sakila.film.title, sakila.rental.rental_date
 - все буквы в фамилии и имени из верхнего регистра переведите в нижний регистр,
 - замените буквы 'll' в именах на 'pp'.
 
-### Решение:  
+### Решение:    
+
+- Это задание вызвало у меня некоторые трудности и пришлось гуглить. Получился следующий запрос:
+
+```
+mysql> SELECT
+    ->   LOWER(first_name) AS first_name,
+    ->   REPLACE(LOWER(last_name), 'll', 'pp') AS last_name
+    -> FROM
+    ->   sakila.customer
+    -> WHERE
+    ->   first_name = 'kelly' OR first_name = 'willie';
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| kelly      | torres    |
+| willie     | howepp    |
+| willie     | markham   |
+| kelly      | knott     |
++------------+-----------+
+4 rows in set (0.00 sec)
+```
+
+- Здесь мы используем алиасы, чтобы вывести "исправленные" таблицы first_name и last_name (в нижнем регистре), а также две функции длы запроса к last_name, т.к. нам нужно вывести имя в нижгнем регистре (LOWER) и заменить двойные l на двойные p (REPLACE).
+
+Проверим, убрав REPLACE, случилась ли вообще замена:  
+
+```
+mysql> SELECT
+    ->   LOWER(first_name) AS first_name,
+    ->   LOWER(last_name) AS last_name
+    -> FROM
+    ->   sakila.customer
+    -> WHERE
+    ->   first_name IN ('kelly', 'willie');
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| kelly      | torres    |
+| willie     | howell    |
+| willie     | markham   |
+| kelly      | knott     |
++------------+-----------+
+4 rows in set (0.01 sec)
+```
+
+Да, все супер.
 
 ---
